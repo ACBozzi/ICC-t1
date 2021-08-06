@@ -1,0 +1,62 @@
+COMPILAÇÃO: MAKE
+EXECUÇÃO: ./matrixlnv -p -o caminho/ate_o_que_ja/existe.txt < matrizes.txt
+
+A estrutura de dados escolhida para armazenar os dados foi Struct:
+typedef struct {
+  unsigned int n;   --> tamanho da matriz
+  real_t **A;   -->  coeficientes da matriz
+} Matriz_t;
+ 
+typedef float real_t;
+ 
+O programa contém a seguinte listagem de funções:
+Matriz_t* alocaMatriz (unsigned int n);
+void copiaMatriz (Matriz_t *SL, Matriz_t *original);
+Matriz_t *lerMatriz ();
+void prnMatriz (Matriz_t *matriz);
+void prnVetor (real_t *vet, unsigned int n);
+int calculaDeterminante(Matriz_t *matriz, int determ);
+real_t* normaL2residuo(Matriz_t *original, Matriz_t *inversa);
+int decomposicaoLU (Matriz_t *matriz, real_t *tTotal);
+Matriz_t *inversa(Matriz_t *L, Matriz_t *matriz, int n,real_t *tTotal);
+real_t* triangSuperior(Matriz_t *matriz, real_t *y,real_t *tx);
+real_t* triangInferior(Matriz_t *L, real_t *x,real_t *ty);
+int encontraMax(Matriz_t *matriz, int n,int linha, int coluna);
+Matriz_t* trocaLinhas(Matriz_t *matriz, int linha_pivo, int coluna);
+int decomposicaoLUpivoteamento(Matriz_t *matriz, real_t *tTotal);
+ 
+ 
+2.1 Funções básica:
+	O desenvolvimento do código contém funções básicas de construção e manipulação de matrizes. Ele possui uma função de alocação, onde é passado o tamanho da matriz para alocar o espaço:
+Matriz_t* alocaMatriz (unsigned int n);
+
+
+	Seguido da função de leitura da matriz da entrada padrão, essa função é a primeira a ser chamada, e dentro dela ainda é chamada a função de alocação assim que é lido o tamanho, e assim aloca e armazena o tamanho e a matriz:
+Matriz_t *lerMatriz ();
+	Há também a função que tem por objetivo fazer uma cópia da matriz original, para guardar a informação e mais tarde mostrá-la na saída padrão, ela recebe a matriz SL onde é feita a cópia da matriz original, a matriz SL será passada para as demais funções para ser editada:
+void copiaMatriz (Matriz_t *SL, Matriz_t *original);
+
+
+	E nessa seção de funções por fim temos as funções que mostram as matrizes e vetores na saída padrão, elas recebem respectivamente a matriz, depois a outra o vetor e seu tamanho:
+
+void prnMatriz (Matriz_t *matriz);
+void prnVetor (real_t *vet, unsigned int n);
+ 
+ 
+2.2 Funções de operação das matrizes:
+
+int calculaDeterminante(Matriz_t *matriz, int determ);
+real_t* normaL2residuo(Matriz_t *original, Matriz_t *inversa);
+
+Matriz_t *inversa(Matriz_t *L, Matriz_t *matriz, int n,real_t *tTotal);
+
+int encontraMax(Matriz_t *matriz, int n,int linha, int coluna);
+Matriz_t* trocaLinhas(Matriz_t *matriz, int linha_pivo, int coluna);
+
+
+	Primeiramente é utilizado as funções de decomposição LU com ou sem pivoteamento parcial de acordo com o parâmetro passado na entrada padrão:
+matrixInv -p -o <arquivo_saida>, onde -p chama a função de fatoração com pivoteamento parcial. Essas funções recebem a matriz e a variável que irá receber os tempos de execução:
+int decomposicaoLU (Matriz_t *matriz, real_t *tTotal);
+int decomposicaoLUpivoteamento(Matriz_t *matriz, real_t *tTotal);
+ 
+Posteriormente à decomposição LU, temos as matrizes L, com os coeficientes que foram usados para zerar os elementos abaixo da diagonal principal da matriz agora chamada de  U. Inicia-se o cálculo da inversa, fazendo as operações necessária, chama-se a função para solução dos sistemas de triangularização, e por fim calcula-se os tempos e a norma.
